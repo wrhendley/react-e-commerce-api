@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './AppStyles.css';
 import CustomerList from './components/CustomerList';
 import OrderList from './components/OrderList';
+import OrderForm from './components/OrderForm';
 import ProductList from './components/ProductList';
 import ProductForm from './components/ProductForm';
 import CustomerForm from './components/CustomerForm';
@@ -15,11 +16,15 @@ const App = () => {
   //     selectedOrderId: null
   //   };
   // }
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const [orders, setOrders] = useState([]);
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
-        fetchProducts();
+        // fetchProducts();
+        fetchOrders();
     }, []);
 
     const fetchProducts = async () => {
@@ -28,6 +33,15 @@ const App = () => {
             setProducts(response.data);
         } catch (error) {
             console.error('Error fetching products:', error);
+        }
+    };
+
+    const fetchOrders = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:5000/orders`);
+            setOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
         }
     };
 
@@ -42,6 +56,19 @@ const App = () => {
 
     const handleProductDeleted = () => {
         handleProductUpdated();
+    };
+
+    const handleEditOrder = (order) => {
+        setSelectedOrder(order);
+    };
+
+    const handleOrderUpdated = () => {
+        fetchOrders();
+        setSelectedOrder(null);
+    };
+
+    const handleOrderDeleted = () => {
+        handleOrderUpdated();
     };
 
   // handleCustomerSelect = (customerId) => {
@@ -64,20 +91,35 @@ const App = () => {
   //   );
   // }
 
+    // return (
+    //     <div className='app-container'>
+    //         <h1>Product Management</h1>
+    //         <ProductForm 
+    //             selectedProduct={selectedProduct} 
+    //             onProductUpdated={handleProductUpdated}
+    //         />
+    //         <ProductList 
+    //             products={products}
+    //             onEditProduct={handleEditProduct} 
+    //             onProductDeleted={handleProductDeleted}
+    //         />
+    //     </div>
+    // );
+
     return (
         <div className='app-container'>
-            <h1>Product Management</h1>
-            <ProductForm 
-                selectedProduct={selectedProduct} 
-                onProductUpdated={handleProductUpdated}
+            <h1>Orders Management</h1>
+            <OrderForm
+                selectedOrder={selectedOrder}
+                onOrderUpdated={handleOrderUpdated}
             />
-            <ProductList 
-                products={products}
-                onEditProduct={handleEditProduct} 
-                onProductDeleted={handleProductDeleted}
+            <OrderList
+                orders={orders}
+                onEditOrder={handleEditOrder}
+                onOrderDeleted={handleOrderDeleted}
             />
         </div>
-    );
+    )
 }
 
 export default App

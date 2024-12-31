@@ -1,7 +1,5 @@
 import { array, func } from 'prop-types';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
-import ProductForm from './ProductForm';
 
 const ProductList = ({ products, onEditProduct, onProductDeleted }) => {
     const deleteProduct = async (id) => {
