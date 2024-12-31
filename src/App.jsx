@@ -20,8 +20,8 @@ class App extends Component {
     this.setState({ selectedCustomerId: customerId });
   }
 
-  handleOrderSelect = (orderId) => {
-    this.setState({ selectedOrderId: orderId });
+  updateCustomerList = () => {
+    this.customerListRef.fetchCustomers();
   }
 
   render() {
@@ -30,17 +30,8 @@ class App extends Component {
     return (
       <div className='app-container'>
         <h1>Our Customers</h1>
-        <CustomerForm />
-        <ProductForm />
-        <CustomerList onCustomerSelect={this.handleCustomerSelect} />
-        {selectedCustomerId &&
-          <OrderList 
-            customerId={selectedCustomerId} 
-            onOrderSelect={this.handleOrderSelect}/>
-        }
-        {selectedOrderId && 
-          <ProductList orderId={selectedOrderId} />
-        }
+        <CustomerForm customerId={selectedCustomerId} onUpdateCustomerList={this.updateCustomerList}/>
+        <CustomerList ref={ref => this.customerListRef = ref} onCustomerSelect={this.handleCustomerSelect} />
       </div>
     );
   }

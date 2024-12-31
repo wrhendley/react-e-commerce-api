@@ -12,28 +12,34 @@ class CustomerList extends Component {
     }
 
     componentDidMount() {        
+        this.fetchCustomers();
+    }
+    
+    fetchCustomers = () => {
         axios.get('http://127.0.0.1:5000/customers')
             .then(response => {
                 this.setState({ customers: response.data });
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);
-            });   
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.selectedCustomerId !== this.state.selectedCustomerId) {
-            console.log('New customer selected: ID', this.state.selectedCustomerId);
-        }
-    }
-
-    componentWillUnmount() {
-        console.log('CustomerList component is being unmounted');
+            });
     }
 
     selectCustomer = (id) => {
         this.setState({ selectedCustomerId: id });
         this.props.onCustomerSelect(id);
+    }
+
+    deleteCustomer = (customerId) => {
+        axios.delete(`http://127.0.0.1:5000/customers/${customerId}`)
+            .then(response => {
+                console.log('Customer deleted:', response.data);
+                this.fetchCustomers();
+            })
+            .catch(error => {
+                console.log('Customer ID:', customerId);
+                console.error('Error deleting customer:', error);
+            });
     }
 
     render() {
@@ -46,6 +52,7 @@ class CustomerList extends Component {
                     {customers.map(customer => (
                         <li key={customer.id} onClick={() => this.selectCustomer(customer.id)}>
                             {customer.name}
+                            <button onClick={() => this.deleteCustomer(customer.id)}>Delete</button>
                         </li>
                     ))}
                 </ul>
