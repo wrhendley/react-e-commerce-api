@@ -1,64 +1,58 @@
-import { Component } from "react";
+import React, { useEffect, useState } from 'react';
 import '../AppStyles.css';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+import { NavLink, Link } from 'react-router-dom';
 
-class CustomerList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            customers: [],
-            selectedCustomerId: null
-        };
-    }
+const CustomerList = ({ onCustomerSelect, onDeleteCustomer }) => {
+    const [customers, setCustomers] = useState([]);
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
-    componentDidMount() {        
-        this.fetchCustomers();
-    }
-    
-    fetchCustomers = () => {
+    useEffect(() => {
+        fetchCustomers();
+    }, []);
+
+    const fetchCustomers = () => {
         axios.get('http://127.0.0.1:5000/customers')
             .then(response => {
-                this.setState({ customers: response.data });
+                setCustomers(response.data);
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);
             });
-    }
+    };
 
-    selectCustomer = (id) => {
-        this.setState({ selectedCustomerId: id });
-        this.props.onCustomerSelect(id);
-    }
+    const handleSelectCustomer = (id) => {
+        console.log('Selected customer ID:', id);
+        setSelectedCustomerId(id);
+    };
 
-    deleteCustomer = (customerId) => {
-        axios.delete(`http://127.0.0.1:5000/customers/${customerId}`)
-            .then(response => {
-                console.log('Customer deleted:', response.data);
-                this.fetchCustomers();
-            })
-            .catch(error => {
-                console.log('Customer ID:', customerId);
-                console.error('Error deleting customer:', error);
-            });
-    }
+    const handleDeleteCustomer = (customerId) => {
+        onDeleteCustomer(customerId);
+        fetchCustomers();
+    };
 
-    render() {
-        const { customers } = this.state;
+    return (
+        <div>
+            <ul>
+                {customers.map(customer => (
+                    <li key={customer.id}>
+                        <NavLink to={`/customers/${customer.id}`}>
+                            <div className='row column-gap-3 text-dark text-decoration-none'>
+                                <div className='col-md-2'>{customer.name}</div>
+                                <button className="btn btn-primary col-md-2">Delete</button>
+                            </div>
+                        </NavLink>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
 
-        return(
-            <div className="customer-list">
-                <h3>Customers</h3>
-                <ul>
-                    {customers.map(customer => (
-                        <li key={customer.id} onClick={() => this.selectCustomer(customer.id)}>
-                            {customer.name}
-                            <button onClick={() => this.deleteCustomer(customer.id)}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
-    }
-}
+CustomerList.propTypes = {
+    onCustomerSelect: PropTypes.func.isRequired,
+    onDeleteCustomer: PropTypes.func.isRequired
+};
 
 export default CustomerList;

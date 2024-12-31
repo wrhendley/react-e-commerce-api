@@ -1,54 +1,64 @@
-import { Component } from "react";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import CustomerList from './CustomerList';
 
-class CustomerForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            email: '',
-            phone: '',
-            address: '',
-            errors: {}
-        };
-    }
+const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
+    const { id } = useParams();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({});
 
-    componentDidUpdate(prevProps) {
-        if (this.props.customerId !== prevProps.customerId) {
-            this.setState({ selectedCustomerId: this.props.customerId });
-
-            if (this.props.customerId) {
-                axios.get(`http://127.0.0.1:5000/customers/${this.props.customerId}`)
-                    .then(response => {
-                        const customerData = response.data;
-                        this.setState({
-                            name: customerData.name,
-                            email: customerData.email,
-                            phone: customerData.phone,
-                            address: customerData.address
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching customer data:', error);
-                    });
-            } else {
-                this.setState({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    address: ''
+    useEffect(() => {
+        if (id) {
+            axios.get(`http://127.0.0.1:5000/customers/${id}`)
+                .then(response => {
+                    const customerData = response.data;
+                    setName(customerData.name);
+                    setEmail(customerData.email);
+                    setPhone(customerData.phone);
+                    setAddress(customerData.address);
+                    setUsername(customerData.username);
+                    setPassword(customerData.password);
+                    console.log('Customer data:', customerData);
+                })
+                .catch(error => {
+                    console.error('Error fetching customer data:', error);
                 });
-            }
         }
-    }                
+    }, [id]);
 
-    handleChange = (event) => {
+    const handleChange = (event) => {
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        switch (name) {
+            case 'name':
+                setName(value);
+                break;
+            case 'email':
+                setEmail(value);
+                break;
+            case 'phone':
+                setPhone(value);
+                break;
+            case 'address':
+                setAddress(value);
+                break;
+            case 'username':
+                setUsername(value);
+                break;
+            case 'password':
+                setPassword(value);
+                break;
+            default:
+                break;
+        }
     };
 
-    validateForm = () => {
-        const { name, username, password, email, phone, address } = this.state;
+    const validateForm = () => {
         const errors = {};
         if (!name) errors.name = 'Name is required';
         if (!username) errors.username = 'Username is required';
@@ -59,91 +69,86 @@ class CustomerForm extends Component {
         return errors;
     };
 
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        const errors = this.validateForm();
-        if(Object.keys(errors).length === 0) {
+        const errors = validateForm();
+        if (Object.keys(errors).length === 0) {
             const customerData = {
-                name: this.state.name.trim(),
-                email: this.state.email.trim(),
-                phone: this.state.phone.trim(),
-                address: this.state.address.trim(),
-                username: this.state.username.trim(),
-                password: this.state.password.trim()
+                name: name.trim(),
+                email: email.trim(),
+                phone: phone.trim(),
+                address: address.trim(),
+                username: username.trim(),
+                password: password.trim()
             };
-            const apiUrl = this.state.selectedCustomerId
-                ? `http://127.0.0.1:5000/customers/${this.state.selectedCustomerId}`
+            const apiUrl = id
+                ? `http://127.0.0.1:5000/customers/${id}`
                 : 'http://127.0.0.1:5000/customers';
 
-            const httpMethod = this.state.selectedCustomerId ? axios.put : axios.post;
+            const httpMethod = id ? axios.put : axios.post;
 
             httpMethod(apiUrl, customerData)
                 .then(response => {
-                        this.props.onUpdateCustomerList();
+                    onUpdateCustomerList();
+                    setName('');
+                    setEmail('');
+                    setPhone('');
+                    setAddress('');
+                    setUsername('');
+                    setPassword('');
+                })
+                .catch(error => {
+                    console.error('Error submitting customer data:', error);
+                });
+        } else {
+            setErrors(errors);
+        }
+    };
 
-                        this.setState({
-                            name: '',
-                            username: '',
-                            password: '',
-                            email: '',
-                            phone: '',
-                            address: ''
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error submitting the form: ', error);
-                    });
-                } else {
-                    this.setState({ errors });
-                }
-            };
-
-    render() {
-        const { name, username, password, email, phone, address, errors } = this.state;
-
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <h3>Add/Edit Customer</h3>
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
                 <label>
                     Name:
-                    <input type='text' name="name" value={name} onChange={this.handleChange} />
+                    <input type='text' name="name" value={name} onChange={handleChange} />
                     {errors.name && <span style={{ color: 'red' }}>{errors.name}</span>}
                 </label>
                 <br />
                 <label>
-                    Username:
-                    <input type='text' name="username" value={username} onChange={this.handleChange} />
-                    {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input type='password' name="password" value={password} onChange={this.handleChange} />
-                    {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
-                </label>
-                <br />
-                <label>
                     Email:
-                    <input type='email' name="email" value={email} onChange={this.handleChange} />
+                    <input type='email' name="email" value={email} onChange={handleChange} />
                     {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
                 </label>
                 <br />
                 <label>
                     Phone:
-                    <input type='tel' name="phone" value={phone} onChange={this.handleChange} />
+                    <input type='tel' name="phone" value={phone} onChange={handleChange} />
                     {errors.phone && <span style={{ color: 'red' }}>{errors.phone}</span>}
                 </label>
                 <br />
                 <label>
                     Address:
-                    <input type='text' name="address" value={address} onChange={this.handleChange} />
+                    <input type='text' name="address" value={address} onChange={handleChange} />
                     {errors.address && <span style={{ color: 'red' }}>{errors.address}</span>}
                 </label>
                 <br />
-                <button type='submit'>Submit</button>
+                <label>
+                    Username:
+                    <input type='text' name="username" value={username} onChange={handleChange} />
+                    {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
+                </label>
+                <br />
+                <label>
+                    Password:
+                    <input type='password' name="password" value={password} onChange={handleChange} />
+                    {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
+                </label>
+                <br />
+                <button className="btn btn-primary" type='submit'>Submit</button>
             </form>
-        );
-    }
-}
+            <CustomerList />
+        </div>
+    );
+};
 
 export default CustomerForm;
