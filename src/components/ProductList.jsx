@@ -1,24 +1,17 @@
-import { number } from 'prop-types';
+import { array, func } from 'prop-types';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import ProductForm from './ProductForm';
 
-const ProductList = ({ orderId }) => {
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:5000/products`);
-                setProducts(response.data);
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
+const ProductList = ({ products, onEditProduct, onProductDeleted }) => {
+    const deleteProduct = async (id) => {
+        try {
+            await axios.delete(`http://127.0.0.1:5000/products/${id}`);
+            onProductDeleted();
+        } catch (error) {
+            console.error('Error deleting product:', error);
         }
-
-        if (orderId) {
-            fetchProducts();
-        }
-    }, [orderId]);
+    };
 
     return (
         <div className='product-list'>
@@ -27,15 +20,19 @@ const ProductList = ({ orderId }) => {
                 {products.map(product => (
                     <li key={product.id}>
                         {product.name} (ID: {product.id})
+                        <button onClick={() => onEditProduct(product)}>Edit</button>
+                        <button onClick={() => deleteProduct(product.id)}>Delete</button>
                     </li>
                 ))}
             </ul>
         </div>
     );
-}
+};
 
 ProductList.propTypes = {
-    orderId: number
+    products: array,
+    onEditProduct: func,
+    onProductDeleted: func
 };
 
 export default ProductList;
