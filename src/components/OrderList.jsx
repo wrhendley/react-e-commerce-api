@@ -1,31 +1,13 @@
-import { func, number } from 'prop-types';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { array } from 'prop-types';
 
-const OrderList = ({ customerId, onOrderSelect }) => {
-    const [orders, setOrders] = useState([]);
-
-    useEffect(() => {
-        if (customerId) {
-            const fetchedOrders = [
-                { id: 101, date: '2021-01-01' },
-                { id: 102, date: '2021-01-15' },
-                { id: 103, date: '2021-02-08' }
-            ];
-            setOrders(fetchedOrders);
-         
-            axios.get(`http://localhost:3000/customers/${customerId}/orders`)
-                .then(data => setOrders(data));
-        }
-    }, [customerId]);
-
+const OrderList = ({ orders }) => {
     return (
         <div className='order-list'>
             <h3>Orders</h3>
             <ul>
                 {orders.map(order => (
-                    <li key={order.id} onClick={() => onOrderSelect(order.id)}>
-                        Order ID: {order.id}, Date: {order.date}
+                    <li key={order.id}>
+                        Order ID: {order.id} - Order Date: {order.order_date} - Customer ID: {order.customer_id} - Total: ${order.total_price.toFixed(2)}
                     </li>
                 ))}
             </ul>
@@ -34,8 +16,7 @@ const OrderList = ({ customerId, onOrderSelect }) => {
 }
 
 OrderList.propTypes = {
-    customerId: number,
-    onOrderSelect: func
+    orders: array,
 };
 
 export default OrderList;
