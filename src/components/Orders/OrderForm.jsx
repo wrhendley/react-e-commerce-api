@@ -2,7 +2,7 @@ import { func, number } from 'prop-types';
 import { useState } from 'react';
 import axios from 'axios';
 
-const OrderForm = () => {
+const OrderForm = ({ onOrderUpdated }) => {
     const [date, setDate] = useState('');
     const [customerId, setCustomerId] = useState('');
     const [orderItems, setOrderItems] = useState([ { productId: '', quantity: '' } ]);
@@ -44,14 +44,8 @@ const OrderForm = () => {
                         quantity: parseInt(item.quantity) 
                     }))
                 };
-
                 console.log('orderData:', orderData);
-                if (selectedOrder) {
-                    await axios.put(`http://127.0.0.1:5000/orders/${selectedOrder.id}`, orderData);
-                }
-                else {
-                    await axios.post(`http://127.0.0.1:5000/orders`, orderData);
-                }
+                await axios.post(`http://127.0.0.1:5000/orders`, orderData);
                 onOrderUpdated();
                 setDate('');
                 setCustomerId('');
@@ -124,7 +118,6 @@ const OrderForm = () => {
 };
 
 OrderForm.propTypes = {
-    selectedOrder: number,
     onOrderUpdated: func.isRequired
 };
 
