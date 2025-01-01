@@ -17,7 +17,7 @@ const ProductList = ({ products, onProductDeleted }) => {
             <h3>Products</h3>
             <ul>
                 {products.map(product => (
-                    <li key={product.id} className="row column-gap-3 text-dark text-decoration-none">
+                    <li key={product.id} className="row column-gap-3 text-dark text-decoration-none me-4">
                         <div className="col-md-4">{product.name} (ID: {product.id})</div>
                         
                         <Link to={`/products/${product.id}`} className="btn btn-primary col-md-2">
