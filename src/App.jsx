@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './AppStyles.css';
-import CustomerList from './components/CustomerList';
-import OrderList from './components/OrderList';
-import OrderForm from './components/OrderForm';
-import ProductList from './components/ProductList';
-import ProductForm from './components/ProductForm';
-import CustomerForm from './components/CustomerForm';
+import CustomerManager from './components/Customers/CustomerManager';
+import ProductForm from './components/Products/ProductForm';
+import ProductList from './components/Products/ProductList';
+import OrderForm from './components/Orders/OrderForm';
+import OrderList from './components/Orders/OrderList';
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Home';
 import axios from 'axios';
@@ -14,13 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const App = () => {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     selectedCustomerId: null,
-  //     selectedOrderId: null
-  //   };
-  // }
+    const [customers, setCustomers] = useState([]);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -28,6 +21,7 @@ const App = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
+        fetchCustomers();
         // fetchProducts();
         // fetchOrders();
     }, []);
@@ -59,92 +53,26 @@ const App = () => {
         }
     };
 
-    const handleEditProduct = (product) => {
-        setSelectedProduct(product);
+    const handleCustomerUpdated = () => {
+        fetchCustomers();
     };
 
     const handleProductUpdated = () => {
         fetchProducts();
-        setSelectedProduct(null);
-    };
-
-    const handleCustomerDeleted = () => {
-    };
-
-    const handleProductDeleted = () => {
-        handleProductUpdated();
-    };
-
-    const handleCustomerUpdated = (customerId) => {
-        if (customerId) {
-            this.setState({ selectedCustomerId: customerId });
-        }
-        updateCustomerList();
-    };
-
-    const updateCustomerList = () => {
-        this.customerListRef.fetchCustomers();
-    };
-
-    const handleEditOrder = (order) => {
-        setSelectedOrder(order);
     };
 
     const handleOrderUpdated = () => {
         fetchOrders();
-        setSelectedOrder(null);
     };
-
-  // render() {
-  //   const { selectedCustomerId, selectedOrderId } = this.state;
-
-  //   return (
-  //     <div className='app-container'>
-  //       <h1>Our Customers</h1>
-  //       <CustomerForm customerId={selectedCustomerId} onUpdateCustomerList={this.updateCustomerList}/>
-  //       <CustomerList ref={ref => this.customerListRef = ref} onCustomerSelect={this.handleCustomerSelect} />
-  //     </div>
-  //   );
-  // }
-
-    // return (
-    //     <div className='app-container'>
-    //         <h1>Product Management</h1>
-    //         <ProductForm 
-    //             selectedProduct={selectedProduct} 
-    //             onProductUpdated={handleProductUpdated}
-    //         />
-    //         <ProductList 
-    //             products={products}
-    //             onEditProduct={handleEditProduct} 
-    //             onProductDeleted={handleProductDeleted}
-    //         />
-    //     </div>
-    // );
-
-    // return (
-    //     <div className='app-container'>
-    //         <h1>Orders Management</h1>
-    //         <OrderForm
-    //             selectedOrder={selectedOrder}
-    //             onOrderUpdated={handleOrderUpdated}
-    //         />
-    //         <OrderList
-    //             orders={orders}
-    //             onEditOrder={handleEditOrder}
-    //             onOrderDeleted={handleOrderDeleted}
-    //         />
-    //     </div>
-    // )
 
     return (
         <div className='app-container'>
             <NavigationBar />
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/customers' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={fetchCustomers} />} />
-                <Route path='/customers/:id' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={handleCustomerDeleted} />} />
-                <Route path='/products' element={<ProductForm selectedProductId={({ match }) => match.params.id} onProductUpdated={handleProductUpdated} onUpdateProductList={fetchProducts} onDeleteProduct={fetchProducts} />} />
+                <Route path='/customers' element={<CustomerManager />} />
+                <Route path='/customers/:id' element={<CustomerManager />} />
+                <Route path='/products' element={<ProductForm selectedProductId={({ match }) => match.params.id} onProductUpdated={handleProductUpdated} onUpdateProductList={handleProductUpdated} onDeleteProduct={handleProductUpdated} />} />
                 <Route path='/products/:id' element={<ProductForm onProductUpdated={handleProductUpdated} />} />
                 <Route path='/orders' element={<OrderList />} />
                 <Route path='/orders/:id' element={<OrderForm onOrderUpdated={handleOrderUpdated} />} />

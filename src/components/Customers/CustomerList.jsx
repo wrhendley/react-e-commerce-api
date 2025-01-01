@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import '../AppStyles.css';
+import '../../AppStyles.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const CustomerList = ({ onDeleteCustomer }) => {
-    const [customers, setCustomers] = useState([]);
+const CustomerList = ({ customers, onDeleteCustomer }) => {
 
-    useEffect(() => {
-        fetchCustomers();
-    }, []);
+    // useEffect(() => {
+    //     fetchCustomers();
+    // }, []);
 
-    const fetchCustomers = () => {
-        axios.get('http://127.0.0.1:5000/customers')
-            .then(response => {
-                setCustomers(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            });
-    };
+    // const fetchCustomers = () => {
+    //     axios.get('http://127.0.0.1:5000/customers')
+    //         .then(response => {
+    //             setCustomers(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching data: ', error);
+    //         });
+    // };
 
     const handleDeleteCustomer = (customerId) => {
         axios.delete(`http://127.0.0.1:5000/customers/${customerId}`)
@@ -35,7 +34,8 @@ const CustomerList = ({ onDeleteCustomer }) => {
     };
 
     return (
-        <div>
+        <div className="container bg-white border">
+            <h2 className=''>Customers</h2>
             <ul>
                 {customers.map(customer => (
                     <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none">

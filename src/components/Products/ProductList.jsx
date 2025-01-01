@@ -1,8 +1,9 @@
 import { array, func } from 'prop-types';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const ProductList = ({ onEditProduct, onProductDeleted }) => {
+const ProductList = ({ onProductDeleted }) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -34,13 +35,11 @@ const ProductList = ({ onEditProduct, onProductDeleted }) => {
                 {products.map(product => (
                     <li key={product.id} className="row column-gap-3 text-dark text-decoration-none">
                         <div className="col-md-4">{product.name} (ID: {product.id})</div>
-                        <button 
-                            className="btn btn-primary col-md-2" 
-                            onClick={() => {
-                                window.location.href = `/products/${product.id}`;
-                            }}>
+                        
+                        <Link to={`/products/${product.id}`} className="btn btn-primary col-md-2">
                             Edit
-                        </button>
+                        </Link>
+
                         <button 
                             className="btn btn-danger col-md-2" 
                             onClick={() => {

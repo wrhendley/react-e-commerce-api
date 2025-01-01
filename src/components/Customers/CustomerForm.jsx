@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CustomerList from './CustomerList';
-import NavigationBar from './NavigationBar';
 
-const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
+const CustomerForm = ({ onUpdateCustomerList }) => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -62,11 +62,13 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
     const validateForm = () => {
         const errors = {};
         if (!name) errors.name = 'Name is required';
-        if (!username) errors.username = 'Username is required';
-        if (!password) errors.password = 'Password is required';
         if (!email) errors.email = 'Email is required';
         if (!phone) errors.phone = 'Phone is required';
         if (!address) errors.address = 'Address is required';
+        if (!id) {
+            if (!username) errors.username = 'Username is required';
+            if (!password) errors.password = 'Password is required';
+        }
         return errors;
     };
 
@@ -79,8 +81,8 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
                 email: email.trim(),
                 phone: phone.trim(),
                 address: address.trim(),
-                username: username.trim(),
-                password: password.trim()
+                username: id ? undefined : username.trim(),
+                password: id ? undefined : password.trim()
             };
             const apiUrl = id
                 ? `http://127.0.0.1:5000/customers/${id}`
@@ -90,13 +92,14 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
 
             httpMethod(apiUrl, customerData)
                 .then(response => {
-                    onUpdateCustomerList();
                     setName('');
                     setEmail('');
                     setPhone('');
                     setAddress('');
                     setUsername('');
                     setPassword('');
+                    onUpdateCustomerList();
+                    navigate('/customers');
                 })
                 .catch(error => {
                     console.error('Error submitting customer data:', error);
@@ -107,8 +110,8 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
     };
 
     return (
-
-        <div className='bg-light p-3'>
+        <div className='container bg-light p-3'>
+            <h2>{id ? 'Edit Customer' : 'Add Customer'}</h2>
             <form onSubmit={handleSubmit} className='mb-3 border p-3 bg-light text-dark'>
                 <label className="form-label">
                     Name:
@@ -136,19 +139,18 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
                 <br />
                 <label className="form-label">
                     Username:
-                    <input type='text' name="username" value={username} onChange={handleChange} className='form-control' />
+                    <input type='text' name="username" value={username} onChange={handleChange} className='form-control' disabled={!!id} />
                     {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
                 </label>
                 <br />
                 <label className="form-label">
                     Password:
-                    <input type='password' name="password" value={password} onChange={handleChange} className='form-control' />
+                    <input type='password' name="password" value={password} onChange={handleChange} className='form-control' disabled={!!id} />
                     {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
                 </label>
                 <br />
                 <button className="btn btn-primary" type='submit'>{id ? 'Edit' : 'Add Customer'}</button>
             </form>
-            <CustomerList />
         </div>
     );
 };

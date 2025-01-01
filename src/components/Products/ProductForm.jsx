@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ProductList from './ProductList';
 
-const ProductForm = ({ selectedProduct, onProductUpdated }) => {
+const ProductForm = ({ onProductUpdated }) => {
     const { id } = useParams();
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -43,8 +43,8 @@ const ProductForm = ({ selectedProduct, onProductUpdated }) => {
         if (Object.keys(errors).length === 0) {
             const productData = { name, price, stock };
             try {
-                if (selectedProduct) {
-                    await axios.put(`http://127.0.0.1:5000/products/${selectedProduct.id}`, productData);
+                if (id) {
+                    await axios.put(`http://127.0.0.1:5000/products/${id}`, productData);
                 } else {
                     await axios.post(`http://127.0.0.1:5000/products`, productData);
                 }
