@@ -1,20 +1,30 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ProductList from './ProductList';
 
 const ProductForm = ({ selectedProduct, onProductUpdated }) => {
+    const { id } = useParams();
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        if (selectedProduct) {
-            setName(selectedProduct.name);
-            setPrice(selectedProduct.price);
-            setStock(selectedProduct.stock);
+        if (id) {
+            axios.get(`http://127.0.0.1:5000/products/${id}`)
+                .then(response => {
+                    const productData = response.data;
+                    setName(productData.name);
+                    setPrice(productData.price);
+                    setStock(productData.stock);
+                    console.log('Product data:', productData);
+                })
+                .catch(error => {
+                    console.error('Error fetching product data:', error);
+                });
         }
-    }, [selectedProduct]);
+    }, [id]);
 
     const validateForm = () => {
         const errors = {};
@@ -54,7 +64,7 @@ const ProductForm = ({ selectedProduct, onProductUpdated }) => {
     return (
         <div className='bg-light'>
             <form onSubmit={handleSubmit } className='mb-3 border p-3 bg-light text-dark'>
-                <h3>{selectedProduct ? 'Edit' : 'Add'} Product</h3>
+                <h3>{id ? 'Edit' : 'Add'} Product</h3>
                 <label className="form-label">
                     Name:
                     <input type='text' value={name} onChange={(e) => setName(e.target.value)} className='form-control' />
@@ -73,9 +83,9 @@ const ProductForm = ({ selectedProduct, onProductUpdated }) => {
                     {errors.stock && <span style={{ color: 'red' }}>{errors.stock}</span>}
                 </label>
                 <br />
-                <button className='btn btn-primary' type='submit'>Submit</button>
+                <button className='btn btn-primary' type='submit'>{id ? 'Edit' : 'Add Product'}</button>
             </form>
-            {/* <ProductList /> */}
+            <ProductList />
         </div>
     );
 }

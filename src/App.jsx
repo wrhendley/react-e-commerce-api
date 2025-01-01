@@ -144,7 +144,7 @@ const App = () => {
                 <Route path='/' element={<Home />} />
                 <Route path='/customers' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={fetchCustomers} />} />
                 <Route path='/customers/:id' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={handleCustomerDeleted} />} />
-                <Route path='/products' element={<ProductForm selectedProductId={({ match }) => match.params.id} onUpdateProductList={fetchProducts} onDeleteProduct={fetchProducts} />} />
+                <Route path='/products' element={<ProductForm selectedProductId={({ match }) => match.params.id} onProductUpdated={handleProductUpdated} onUpdateProductList={fetchProducts} onDeleteProduct={fetchProducts} />} />
                 <Route path='/products/:id' element={<ProductForm onProductUpdated={handleProductUpdated} />} />
                 <Route path='/orders' element={<OrderList />} />
                 <Route path='/orders/:id' element={<OrderForm onOrderUpdated={handleOrderUpdated} />} />
