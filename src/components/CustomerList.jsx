@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '../AppStyles.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { NavLink, Link } from 'react-router-dom';
 
-const CustomerList = ({ onCustomerSelect, onDeleteCustomer }) => {
+const CustomerList = ({ onDeleteCustomer }) => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
@@ -45,28 +44,26 @@ const CustomerList = ({ onCustomerSelect, onDeleteCustomer }) => {
             <ul>
                 {customers.map(customer => (
                     <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none">
-                    <div className="col-md-4">{customer.name}</div>
-                    
-                    <button
-                        className="btn btn-primary col-md-2"
-                        onClick={() => {
-                            window.location.href = `/customers/${customer.id}`;
-                        }}
-                    >
-                        Edit
-                    </button>
-                    
-                    <button
-                        className="btn btn-danger col-md-2"
-                        onClick={() => {
-                            if (window.confirm(`Are you sure you want to delete ${customer.name}?`)) {
-                                handleDeleteCustomer(customer.id);
-                            }
-                        }}
-                    >
-                        Delete
-                    </button>
-                </li>
+                        <div className="col-md-4">{customer.name}</div>
+                        
+                        <button
+                            className="btn btn-primary col-md-2"
+                            onClick={() => {
+                                window.location.href = `/customers/${customer.id}`;
+                            }}>
+                            Edit
+                        </button>
+                        
+                        <button
+                            className="btn btn-danger col-md-2"
+                            onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete ${customer.name}?`)) {
+                                    handleDeleteCustomer(customer.id);
+                                }
+                            }}>
+                            Delete
+                        </button>
+                    </li>
                 ))}
             </ul>
         </div>
