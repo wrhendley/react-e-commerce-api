@@ -7,6 +7,7 @@ import OrderForm from './components/OrderForm';
 import ProductList from './components/ProductList';
 import ProductForm from './components/ProductForm';
 import CustomerForm from './components/CustomerForm';
+import NavigationBar from './components/NavigationBar';
 import Home from './components/Home';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -137,6 +138,7 @@ const App = () => {
 
     return (
         <div className='app-container'>
+            <NavigationBar />
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/customers' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={fetchCustomers} />} />

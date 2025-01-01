@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import CustomerList from './CustomerList';
+import NavigationBar from './NavigationBar';
 
 const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
     const { id } = useParams();
@@ -106,8 +107,9 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
     };
 
     return (
+
         <div className='bg-light p-3'>
-            <form onSubmit={handleSubmit} className='mb-3 border p-3'>
+            <form onSubmit={handleSubmit} className='mb-3 border p-3 bg-light text-dark'>
                 <label className="form-label">
                     Name:
                     <input type='text' name="name" value={name} onChange={handleChange} className='form-control' />
