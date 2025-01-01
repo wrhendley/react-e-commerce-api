@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import '../AppStyles.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const CustomerList = ({ onDeleteCustomer }) => {
     const [customers, setCustomers] = useState([]);
-    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
     useEffect(() => {
         fetchCustomers();
@@ -19,11 +19,6 @@ const CustomerList = ({ onDeleteCustomer }) => {
             .catch(error => {
                 console.error('Error fetching data: ', error);
             });
-    };
-
-    const handleSelectCustomer = (id) => {
-        console.log('Selected customer ID:', id);
-        setSelectedCustomerId(id);
     };
 
     const handleDeleteCustomer = (customerId) => {
@@ -45,14 +40,10 @@ const CustomerList = ({ onDeleteCustomer }) => {
                 {customers.map(customer => (
                     <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none">
                         <div className="col-md-4">{customer.name}</div>
-                        
-                        <button
-                            className="btn btn-primary col-md-2"
-                            onClick={() => {
-                                window.location.href = `/customers/${customer.id}`;
-                            }}>
+
+                        <Link to={`/customers/${customer.id}`} className="btn btn-primary col-md-2">
                             Edit
-                        </button>
+                        </Link>
                         
                         <button
                             className="btn btn-danger col-md-2"
