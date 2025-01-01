@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
-        <div className="container bg-light text-dark">
-            <h1>Home</h1>
-            <p>Welcome to our e-commerce site.</p>
-            <div className="row column-gap-3">
+        <div className="container bg-light text-dark border p-3">
+            <h1 className="ms-4">Home</h1>
+            <p className="ms-4">Welcome to our e-commerce site.</p>
+            <div className="row column-gap-3 ms-4">
                 <div className="card" style={{width: "18rem"}}>
                     <div className="card-body">
                         <h5 className="card-title">Customers</h5>
