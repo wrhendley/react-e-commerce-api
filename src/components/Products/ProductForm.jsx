@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ProductList from './ProductList';
 
 const ProductForm = ({ onProductUpdated }) => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [stock, setStock] = useState('');
@@ -48,10 +48,11 @@ const ProductForm = ({ onProductUpdated }) => {
                 } else {
                     await axios.post(`http://127.0.0.1:5000/products`, productData);
                 }
-                onProductUpdated();
                 setName('');
                 setPrice('');
                 setStock('');
+                onProductUpdated();
+                navigate('/products');
             }
             catch (error) {
                 console.error('Error submitting product:', error);
@@ -64,7 +65,7 @@ const ProductForm = ({ onProductUpdated }) => {
     return (
         <div className='bg-light'>
             <form onSubmit={handleSubmit } className='mb-3 border p-3 bg-light text-dark'>
-                <h3>{id ? 'Edit' : 'Add'} Product</h3>
+                <h3 className='mb-3'>{id ? 'Edit' : 'Add'} Product</h3>
                 <label className="form-label">
                     Name:
                     <input type='text' value={name} onChange={(e) => setName(e.target.value)} className='form-control' />
@@ -85,7 +86,6 @@ const ProductForm = ({ onProductUpdated }) => {
                 <br />
                 <button className='btn btn-primary' type='submit'>{id ? 'Edit' : 'Add Product'}</button>
             </form>
-            <ProductList />
         </div>
     );
 }
