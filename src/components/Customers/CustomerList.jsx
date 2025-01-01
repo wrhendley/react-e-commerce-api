@@ -24,7 +24,7 @@ const CustomerList = ({ customers, onDeleteCustomer }) => {
             <h2 className='mt-2 mb-3 ms-4'>Customers</h2>
             <ul>
                 {customers.map(customer => (
-                    <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none">
+                    <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none me-4">
                         <div className="col-md-4">{customer.name}</div>
 
                         <Link to={`/customers/${customer.id}`} className="btn btn-primary col-md-2">

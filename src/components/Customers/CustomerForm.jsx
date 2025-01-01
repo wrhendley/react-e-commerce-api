@@ -109,7 +109,7 @@ const CustomerForm = ({ onUpdateCustomerList }) => {
     };
 
     return (
-        <div className='bg-light'>
+        <div>
             <form onSubmit={handleSubmit} className='mb-3 border p-3 bg-light text-dark'>
                 <h3 className='mb-3'>{id ? 'Edit Customer' : 'Add Customer'}</h3>
                 <label className="form-label">
