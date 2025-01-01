@@ -106,41 +106,41 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
+        <div className='bg-light p-3'>
+            <form onSubmit={handleSubmit} className='mb-3 border p-3'>
+                <label className="form-label">
                     Name:
-                    <input type='text' name="name" value={name} onChange={handleChange} />
+                    <input type='text' name="name" value={name} onChange={handleChange} className='form-control' />
                     {errors.name && <span style={{ color: 'red' }}>{errors.name}</span>}
                 </label>
                 <br />
-                <label>
+                <label className="form-label">
                     Email:
-                    <input type='email' name="email" value={email} onChange={handleChange} />
+                    <input type='email' name="email" value={email} onChange={handleChange} className='form-control' />
                     {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
                 </label>
                 <br />
-                <label>
+                <label className="form-label">
                     Phone:
-                    <input type='tel' name="phone" value={phone} onChange={handleChange} />
+                    <input type='tel' name="phone" value={phone} onChange={handleChange} className='form-control' />
                     {errors.phone && <span style={{ color: 'red' }}>{errors.phone}</span>}
                 </label>
                 <br />
-                <label>
+                <label className="form-label">
                     Address:
-                    <input type='text' name="address" value={address} onChange={handleChange} />
+                    <input type='text' name="address" value={address} onChange={handleChange} className='form-control' />
                     {errors.address && <span style={{ color: 'red' }}>{errors.address}</span>}
                 </label>
                 <br />
-                <label>
+                <label className="form-label">
                     Username:
-                    <input type='text' name="username" value={username} onChange={handleChange} />
+                    <input type='text' name="username" value={username} onChange={handleChange} className='form-control' />
                     {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
                 </label>
                 <br />
-                <label>
+                <label className="form-label">
                     Password:
-                    <input type='password' name="password" value={password} onChange={handleChange} />
+                    <input type='password' name="password" value={password} onChange={handleChange} className='form-control' />
                     {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
                 </label>
                 <br />
