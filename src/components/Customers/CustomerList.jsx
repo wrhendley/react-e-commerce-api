@@ -6,20 +6,6 @@ import { Link } from 'react-router-dom';
 
 const CustomerList = ({ customers, onDeleteCustomer }) => {
 
-    // useEffect(() => {
-    //     fetchCustomers();
-    // }, []);
-
-    // const fetchCustomers = () => {
-    //     axios.get('http://127.0.0.1:5000/customers')
-    //         .then(response => {
-    //             setCustomers(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching data: ', error);
-    //         });
-    // };
-
     const handleDeleteCustomer = (customerId) => {
         axios.delete(`http://127.0.0.1:5000/customers/${customerId}`)
             .then(response => {
@@ -35,7 +21,7 @@ const CustomerList = ({ customers, onDeleteCustomer }) => {
 
     return (
         <div className="container bg-white border">
-            <h2 className=''>Customers</h2>
+            <h2 className='mt-2 mb-3 ms-4'>Customers</h2>
             <ul>
                 {customers.map(customer => (
                     <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none">

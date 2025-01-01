@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CustomerList from './CustomerList';
 
 const CustomerForm = ({ onUpdateCustomerList }) => {
     const { id } = useParams();
@@ -110,9 +109,9 @@ const CustomerForm = ({ onUpdateCustomerList }) => {
     };
 
     return (
-        <div className='container bg-light p-3'>
-            <h2>{id ? 'Edit Customer' : 'Add Customer'}</h2>
+        <div className='bg-light'>
             <form onSubmit={handleSubmit} className='mb-3 border p-3 bg-light text-dark'>
+                <h3 className='mb-3'>{id ? 'Edit Customer' : 'Add Customer'}</h3>
                 <label className="form-label">
                     Name:
                     <input type='text' name="name" value={name} onChange={handleChange} className='form-control' />
