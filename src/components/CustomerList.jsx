@@ -28,22 +28,45 @@ const CustomerList = ({ onCustomerSelect, onDeleteCustomer }) => {
     };
 
     const handleDeleteCustomer = (customerId) => {
-        onDeleteCustomer(customerId);
-        fetchCustomers();
+        axios.delete(`http://127.0.0.1:5000/customers/${customerId}`)
+            .then(response => {
+                console.log('Customer deleted:', response.data);
+                setCustomers(customers.filter(customer => customer.id !== customerId));
+                onDeleteCustomer();
+            })
+            .catch(error => {
+                alert('Failed to delete customer. Please try again later.');
+                console.error('Error deleting customer:', error.response ? error.response.data : error.message);
+            });
     };
 
     return (
         <div>
             <ul>
                 {customers.map(customer => (
-                    <li key={customer.id}>
-                        <NavLink to={`/customers/${customer.id}`}>
-                            <div className='row column-gap-3 text-dark text-decoration-none'>
-                                <div className='col-md-2'>{customer.name}</div>
-                                <button className="btn btn-primary col-md-2">Delete</button>
-                            </div>
-                        </NavLink>
-                    </li>
+                    <li key={customer.id} className="row column-gap-3 text-dark text-decoration-none">
+                    <div className="col-md-4">{customer.name}</div>
+                    
+                    <button
+                        className="btn btn-primary col-md-2"
+                        onClick={() => {
+                            window.location.href = `/customers/${customer.id}`;
+                        }}
+                    >
+                        Edit
+                    </button>
+                    
+                    <button
+                        className="btn btn-danger col-md-2"
+                        onClick={() => {
+                            if (window.confirm(`Are you sure you want to delete ${customer.name}?`)) {
+                                handleDeleteCustomer(customer.id);
+                            }
+                        }}
+                    >
+                        Delete
+                    </button>
+                </li>
                 ))}
             </ul>
         </div>
@@ -51,8 +74,13 @@ const CustomerList = ({ onCustomerSelect, onDeleteCustomer }) => {
 };
 
 CustomerList.propTypes = {
-    onCustomerSelect: PropTypes.func.isRequired,
-    onDeleteCustomer: PropTypes.func.isRequired
+    onCustomerSelect: PropTypes.func,
+    onDeleteCustomer: PropTypes.func
+};
+
+CustomerList.defaultProps = {
+    onCustomerSelect: () => {},
+    onDeleteCustomer: () => {}
 };
 
 export default CustomerList;

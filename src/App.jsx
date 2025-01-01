@@ -66,6 +66,9 @@ const App = () => {
         setSelectedProduct(null);
     };
 
+    const handleCustomerDeleted = () => {
+    };
+
     const handleProductDeleted = () => {
         handleProductUpdated();
     };
@@ -136,8 +139,8 @@ const App = () => {
         <div className='app-container'>
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/customers' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} />} />
-                <Route path='/customers/:id' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} />} />
+                <Route path='/customers' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={fetchCustomers} />} />
+                <Route path='/customers/:id' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={handleCustomerDeleted} />} />
                 <Route path='/products' element={<ProductList />} />
                 <Route path='/products/add' element={<ProductForm onProductUpdated={handleProductUpdated} />} />
                 <Route path='/products/:id' element={<ProductForm onProductUpdated={handleProductUpdated} />} />

@@ -144,7 +144,7 @@ const CustomerForm = ({ onUpdateCustomerList, onCustomerSelect }) => {
                     {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
                 </label>
                 <br />
-                <button className="btn btn-primary" type='submit'>Submit</button>
+                <button className="btn btn-primary" type='submit'>{id ? 'Edit' : 'Add Customer'}</button>
             </form>
             <CustomerList />
         </div>
