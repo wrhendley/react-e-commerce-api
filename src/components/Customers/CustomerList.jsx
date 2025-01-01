@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../../AppStyles.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const CustomerList = ({ customers, onDeleteCustomer }) => {
+    const [customerList, setCustomers] = useState(customers);
 
-    const handleDeleteCustomer = (customerId) => {
+    const handleDeleteCustomer = (customerId, customerName) => {
+        if (window.confirm(`Are you sure you want to delete ${customerName}?`))
         axios.delete(`http://127.0.0.1:5000/customers/${customerId}`)
             .then(response => {
                 console.log('Customer deleted:', response.data);
@@ -14,7 +16,7 @@ const CustomerList = ({ customers, onDeleteCustomer }) => {
                 onDeleteCustomer();
             })
             .catch(error => {
-                alert('Failed to delete customer. Please try again later.');
+                alert('This is the catch in handleDeleteCustomer.');
                 console.error('Error deleting customer:', error.response ? error.response.data : error.message);
             });
     };
@@ -31,13 +33,9 @@ const CustomerList = ({ customers, onDeleteCustomer }) => {
                             Edit
                         </Link>
                         
-                        <button
-                            className="btn btn-danger col-md-2"
-                            onClick={() => {
-                                if (window.confirm(`Are you sure you want to delete ${customer.name}?`)) {
-                                    handleDeleteCustomer(customer.id);
-                                }
-                            }}>
+                        <button className="btn btn-danger col-md-2"
+                                onClick={() => handleDeleteCustomer(customer.id, customer.name)
+                        }>
                             Delete
                         </button>
                     </li>
