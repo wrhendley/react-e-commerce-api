@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { func, number } from 'prop-types';
+import ProductList from './ProductList';
 
 const ProductForm = ({ selectedProduct, onProductUpdated }) => {
     const [name, setName] = useState('');
@@ -52,28 +52,31 @@ const ProductForm = ({ selectedProduct, onProductUpdated }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>{selectedProduct ? 'Edit' : 'Add'} Product</h3>
-            <label>
-                Name:
-                <input type='text' value={name} onChange={(e) => setName(e.target.value)} />
-                {errors.name && <span style={{ color: 'red' }}>{errors.name}</span>}
-            </label>
-            <br />
-            <label>
-                Price:
-                <input type='number' value={price} onChange={(e) => setPrice(e.target.value)} />
-                {errors.price && <span style={{ color: 'red' }}>{errors.price}</span>}
-            </label>
-            <br />
-            <label>
-                Stock:
-                <input type='number' value={stock} onChange={(e) => setStock(e.target.value)} />
-                {errors.stock && <span style={{ color: 'red' }}>{errors.stock}</span>}
-            </label>
-            <br />
-            <button type='submit'>Submit</button>
-        </form>
+        <div className='bg-light'>
+            <form onSubmit={handleSubmit } className='mb-3 border p-3 bg-light text-dark'>
+                <h3>{selectedProduct ? 'Edit' : 'Add'} Product</h3>
+                <label className="form-label">
+                    Name:
+                    <input type='text' value={name} onChange={(e) => setName(e.target.value)} className='form-control' />
+                    {errors.name && <span style={{ color: 'red' }}>{errors.name}</span>}
+                </label>
+                <br />
+                <label className="form-label">
+                    Price:
+                    <input type='number' value={price} onChange={(e) => setPrice(e.target.value)} className='form-control' />
+                    {errors.price && <span style={{ color: 'red' }}>{errors.price}</span>}
+                </label>
+                <br />
+                <label className="form-label">
+                    Stock:
+                    <input type='number' value={stock} onChange={(e) => setStock(e.target.value)} className='form-control' />
+                    {errors.stock && <span style={{ color: 'red' }}>{errors.stock}</span>}
+                </label>
+                <br />
+                <button className='btn btn-primary' type='submit'>Submit</button>
+            </form>
+            {/* <ProductList /> */}
+        </div>
     );
 }
 

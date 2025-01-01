@@ -11,6 +11,7 @@ import NavigationBar from './components/NavigationBar';
 import Home from './components/Home';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const App = () => {
   // constructor(props) {
@@ -143,11 +144,9 @@ const App = () => {
                 <Route path='/' element={<Home />} />
                 <Route path='/customers' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={fetchCustomers} />} />
                 <Route path='/customers/:id' element={<CustomerForm selectedCustomerId={({ match }) => match.params.id} onUpdateCustomerList={fetchCustomers} onDeleteCustomer={handleCustomerDeleted} />} />
-                <Route path='/products' element={<ProductList />} />
-                <Route path='/products/add' element={<ProductForm onProductUpdated={handleProductUpdated} />} />
+                <Route path='/products' element={<ProductForm selectedProductId={({ match }) => match.params.id} onUpdateProductList={fetchProducts} onDeleteProduct={fetchProducts} />} />
                 <Route path='/products/:id' element={<ProductForm onProductUpdated={handleProductUpdated} />} />
                 <Route path='/orders' element={<OrderList />} />
-                <Route path='/orders/add' element={<OrderForm onOrderUpdated={handleOrderUpdated} />} />
                 <Route path='/orders/:id' element={<OrderForm onOrderUpdated={handleOrderUpdated} />} />
             </Routes>
         </div>
