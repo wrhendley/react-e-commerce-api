@@ -1,6 +1,6 @@
 # React E-Commerce API
 
-This is a React e-commerce API designed to interact with the Flask e-commerce API designed earlier.  This repo can found [here](https://github.com/Schnretzl/e-commerce-api) and is required for this assignment.
+This is a React e-commerce API designed to interact with the Flask e-commerce API designed earlier.  This repo can found [here](https://github.com/wrhendley/e-commerce-api) and is required for this assignment.
 
 There are several pages, each largely styled through Bootstrap, all of which have a NavBar at the top:
 
